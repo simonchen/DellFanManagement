@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace DellFanManagement.App
 {
@@ -20,6 +21,15 @@ namespace DellFanManagement.App
         [STAThread]
         static int Main(string[] args)
         {
+            bool createdNew;
+            Mutex m = new Mutex(true, "DellFanManagementApp", out createdNew);
+            if (!createdNew)
+            {
+                // myApp is already running...
+                //MessageBox.Show("DellFanManagementApp is already running!", "Multiple Instances");
+                return 1;
+            }
+
             if (args.Length == 0)
             {
                 // GUI mode.
