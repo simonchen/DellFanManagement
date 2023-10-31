@@ -2,7 +2,7 @@
 
 <img src="DellFanMan.png" />
 
-**注意：此程序可能不适用于控制DELL笔电Intel 11代及以上BIOS系统**
+**注意：[此程序可能不适用于控制DELL笔电Intel 11代及以上BIOS系统](https://github.com/AaronKelley/DellFanManagement/issues/14)**
 
 此程序除了对原作者程序的汉化以外，作了一些精简，
 并特别改进"平滑"模式下，在设定温度范围内自动调节风扇速度，尽可能避免笔电常时间工作在不必要的高风速，高噪音中。
