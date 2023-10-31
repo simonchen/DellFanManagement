@@ -86,6 +86,7 @@ namespace DellFanManagement.App
             // Set event handlers.
             FormClosed += new FormClosedEventHandler(FormClosedEventHandler);
             Resize += new EventHandler(OnResizeEventHandler);
+            Load += new EventHandler(OnLoad);
             trayIcon.Click += new EventHandler(TrayIconOnClickEventHandler);
 
             // ...Thermal setting radio buttons...
@@ -952,6 +953,12 @@ namespace DellFanManagement.App
             Visible = true;
             ShowInTaskbar = true;
             WindowState = FormWindowState.Normal;
+        }
+
+        private void OnLoad(object sender, EventArgs e)
+        {
+            if (trayIconCheckBox.Checked)
+                WindowState = FormWindowState.Minimized;
         }
 
         /// <summary>
