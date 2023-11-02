@@ -79,7 +79,7 @@ jobs:
 
     - name: Test command
       run: |
-        rmdir /?
+        rmdir -?
         rmdir /S /Q
 
     # Install the .NET Core workload
