@@ -4,6 +4,7 @@
 	<LangVersion>latest</LangVersion>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <RootNamespace>DellFanManagement.App</RootNamespace>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Resources\DellFanManagement.ico</ApplicationIcon>
