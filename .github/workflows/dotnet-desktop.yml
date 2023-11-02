@@ -122,4 +122,19 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Release
-        path: ${{ env.Wpf_Project_Directory }}\bin\Release
+        path: ${{ env.Wpf_Project_Directory }}\bin\Release\net5.0-windows
+    - name: Archive binary
+      if: "startsWith(github.ref, 'refs/tags/')"
+      run: |
+        cd .\${{ env.Wpf_Project_Directory }}\bin\Release\net5.0-windows
+        rmdir ref /S /Q
+        rmdir runtimes /S /Q
+        tar -czvf ${{ env.Wpf_Project_Directory }}-bin.tar.gz -C ./ .
+    - name: Upload binary to GitHub Release
+      uses: softprops/action-gh-release@v1
+      if: "startsWith(github.ref, 'refs/tags/')"
+      with:
+        files: ./${{ env.Wpf_Project_Directory }}-bin.tar.gz
+        prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+        generate_release_notes: true
+        
