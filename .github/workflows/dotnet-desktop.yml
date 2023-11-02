@@ -90,16 +90,16 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     # Create the app 
-    #- name: Create the app 
-    #  run: msbuild $env:Wpf_Project_Path /t:Restore /p:Configuration=$env:Configuration 
-    #  env:
-    #    Configuration: ${{ matrix.configuration }}
+    - name: Create the app 
+      run: msbuild $env:Wpf_Project_Path /t:Restore /p:Configuration=$env:Configuration 
+      env:
+        Configuration: ${{ matrix.configuration }}
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: bin
-        path: .
+        path: ${{ env.Wpf_Project_Directory }}
 
     
