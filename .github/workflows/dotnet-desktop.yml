@@ -132,8 +132,8 @@ jobs:
       if: "startsWith(github.ref, 'refs/tags/')"
       run: |
         cd .\${{ env.Wpf_Project_Directory }}\bin\Release\net5.0-windows
-        rmdir ref -recurse -force
-        rmdir runtimes -recurse -force
+        rmdir ref -recurse -force -ErrorAction SilentlyContinue
+        rmdir runtimes -recurse -force -ErrorAction SilentlyContinue
         tar -czvf ${{ env.Wpf_Project_Directory }}-bin.tar.gz -C ./ .
     - name: Upload binary to GitHub Release
       uses: softprops/action-gh-release@v1
