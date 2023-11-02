@@ -38,11 +38,18 @@
 
 name: .NET Core Desktop
 
-on:
-  push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+#on:
+#  push:
+#    branches: [ "develop" ]
+#  pull_request:
+#    branches: [ "develop" ]
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Test Version
+        default: v1.0.0
+        required: true
 
 jobs:
 
