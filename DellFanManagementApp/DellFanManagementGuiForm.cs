@@ -377,10 +377,18 @@ namespace DellFanManagement.App
 
             // Temperatures.
             int labelIndex = 0;
+            int cpu_count = 0;
+            int total_temperature = 0;
+            int avg_temperature = 0;
             foreach (TemperatureComponent component in _state.Temperatures.Keys)
             {
                 foreach (string key in _state.Temperatures[component].Keys)
                 {
+                    if (key.IndexOf("CPU") >= 0)
+                    {
+                        cpu_count += 1;
+                        total_temperature += _state.Temperatures[component][key];
+                    }
                     string temperature = _state.Temperatures[component][key] != 0 ? _state.Temperatures[component][key].ToString() : "--";
 
                     string labelValue;
@@ -418,6 +426,7 @@ namespace DellFanManagement.App
                     labelIndex++;
                 }
             }
+            avg_temperature = total_temperature / cpu_count;
 
             // EC fan control enabled?
             if (_state.OperationMode != OperationMode.Manual)
@@ -517,11 +526,11 @@ namespace DellFanManagement.App
             // Tray icon hover text.
             if (_state.Fan2Present)
             {
-                trayIcon.Text = string.Format("Dell Fan Management\n{0}\n{1}", fan1RpmLabel.Text, fan2RpmLabel.Text);
+                trayIcon.Text = string.Format("Dell 风扇管理\nCPU: {0}\u00B0\n{1}\n{2}", avg_temperature, fan1RpmLabel.Text, fan2RpmLabel.Text);
             }
             else
             {
-                trayIcon.Text = string.Format("Dell Fan Management\n{0}", fan1RpmLabel.Text);
+                trayIcon.Text = string.Format("Dell 风扇管理\nCPU: {0}\u00B0\n{1}", avg_temperature, fan1RpmLabel.Text);
             }
 
             UpdateTrayIcon(false);
