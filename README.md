@@ -7,7 +7,7 @@
 此程序除了对原作者程序的汉化以外，作了一些精简，
 并特别改进"平滑"模式下，在设定温度范围内自动调节风扇速度，尽可能避免笔电常时间工作在不必要的高风速，高噪音中。
 
-更多信息和使用，参考[WIKI](wiki)
+更多信息和使用，参考[WIKI](https://github.com/simonchen/DellFanManagement/wiki)
 
 **使用此程序自担风险！Enjoy it !**
 
