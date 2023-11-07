@@ -24,6 +24,9 @@ namespace DellFanManagement.App.ConsistencyModeHandlers
         /// <summary>
         /// Consistency mode logic; lock the fans if temperature and RPM thresholds are met.
         /// </summary>
+        static int cpu_cool_loops = 0;
+        const short CPU_COOL_DELAY = 5;
+
         public override void RunConsistencyModeLogic()
         {
             if (_core.LowerTemperatureThreshold != null && _core.UpperTemperatureThreshold != null && _core.RpmThreshold != null)
@@ -38,8 +41,16 @@ namespace DellFanManagement.App.ConsistencyModeHandlers
                 {
                     if (_state.Fan1Rpm == 0 && (!_state.Fan2Present || _state.Fan2Rpm == 0))
                     {
-                        thresholdsMet = false;
-                        _state.ConsistencyModeStatus = string.Format("风扇未启动，等待EC激活{0}风扇", _state.Fan2Present ? "全部": "");// Waiting for embedded controller to activate the fan{0}", _state.Fan2Present ? "s" : string.Empty);
+                        if (!_core.EnableStopFan ||
+                            LegacyConsistencyModeHandler.cpu_cool_loops <= 0)
+                        {
+                            thresholdsMet = false;
+                            _state.ConsistencyModeStatus = string.Format("风扇未启动，等待EC激活{0}风扇", _state.Fan2Present ? "全部" : "");// Waiting for embedded controller to activate the fan{0}", _state.Fan2Present ? "s" : string.Empty);
+                        }
+                        else
+                        {
+                            _state.ConsistencyModeStatus = string.Format("风扇未启动，自动调节等待中...");
+                        }
                     }
                     else
                     {
@@ -121,7 +132,9 @@ namespace DellFanManagement.App.ConsistencyModeHandlers
                                 _fanController.SetFanLevel(FanLevel.Medium, FanIndex.AllFans);
                                 _state.ConsistencyModeStatus = "温度在设定范围内，但风扇速度超过设定限值，尝试保持中速";
                             }
-                            else if (is_cpu_cool)
+                            else if (is_cpu_cool &&
+                                LegacyConsistencyModeHandler.cpu_cool_loops >= _core.CpuCoolDelay && 
+                                _core.EnableStopFan)
                             {
                                 _fanController.SetFanLevel(FanLevel.Off, FanIndex.AllFans);
                                 _state.ConsistencyModeStatus = "温度低于下限，但风扇速度超过设定限值，尝试关闭风扇";
@@ -132,11 +145,14 @@ namespace DellFanManagement.App.ConsistencyModeHandlers
                 }
 
                 //if (is_cpu_cool) thresholdsMet = false;
+                if (is_cpu_warm || !thresholdsMet) LegacyConsistencyModeHandler.cpu_cool_loops = 0;
 
                 if (thresholdsMet)
                 {
                     if (!is_cpu_cool)
                     {
+                        LegacyConsistencyModeHandler.cpu_cool_loops -= 1;
+
                         if (_state.EcFanControlEnabled)
                         {
                             _state.EcFanControlEnabled = false;
@@ -153,11 +169,36 @@ namespace DellFanManagement.App.ConsistencyModeHandlers
                     }
                     else
                     {
-                        if (!_state.EcFanControlEnabled)
+                        if (LegacyConsistencyModeHandler.cpu_cool_loops < 0)
+                            LegacyConsistencyModeHandler.cpu_cool_loops = 0;
+                        LegacyConsistencyModeHandler.cpu_cool_loops += 1;
+
+                        if (!_state.EcFanControlEnabled && 
+                            (!_core.EnableStopFan || LegacyConsistencyModeHandler.cpu_cool_loops < _core.CpuCoolDelay))
                         {
                             _state.EcFanControlEnabled = true;
                             _fanController.EnableAutomaticFanControl();
                             _state.ConsistencyModeStatus = "温度低于下限，等待减小风速";
+                            _core.TrayIconColor = TrayIconColor.Blue;
+                        }
+                        else if (LegacyConsistencyModeHandler.cpu_cool_loops >= _core.CpuCoolDelay) // stop fan after cpu was cooling for 15 secs
+                        {
+                            // EC did control the fan speed and  cpu has been kept on cooling for a longer, then we'll try to shutdown the fan.
+                            if (_core.EnableStopFan && (_state.Fan1Rpm > 0 || (_state.Fan2Present && _state.Fan2Rpm > 0)))
+                            {
+                                _state.EcFanControlEnabled = false;
+                                _fanController.DisableAutomaticFanControl();
+                                _fanController.SetFanLevel(FanLevel.Off, FanIndex.AllFans);
+                                _state.ConsistencyModeStatus = "温度低于下限，尝试关闭风扇";
+                                _core.TrayIconColor = TrayIconColor.Blue;
+                            }
+                        }
+                        //else
+                        {
+                            if (_state.Fan1Rpm > 0 || (_state.Fan2Present && _state.Fan2Rpm > 0))
+                                _core.TrayIconColor = TrayIconColor.Blue;
+                            else
+                                _core.TrayIconColor = TrayIconColor.Gray;
                         }
                     }
                 }
