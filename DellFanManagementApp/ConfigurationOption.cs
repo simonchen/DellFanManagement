@@ -40,6 +40,10 @@
         /// </summary>
         public static readonly ConfigurationOption ManualModeFan2Level = new(ConfigurationOptionType.String, "ManualModeFan2Level");
 
+        // Added by Simon
+        public static readonly ConfigurationOption StopFanEnabled = new(ConfigurationOptionType.Integer, "StopFanEnabled");
+        public static readonly ConfigurationOption CpuCoolDelay = new(ConfigurationOptionType.Integer, "CpuCoolDelay");
+
         /// <summary>
         /// Lower temperature threshold for consistency mode.
         /// </summary>

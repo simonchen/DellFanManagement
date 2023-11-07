@@ -64,10 +64,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="bzh_dell_smm_io_x64.sys">
+	 <None Update="bzh_dell_smm_io_x64.sys">
        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Fan-Blue-1.ico">
+	 </None>
+	 <None Update="Resources\Fan-Blue-1.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Fan-Blue-10.ico">

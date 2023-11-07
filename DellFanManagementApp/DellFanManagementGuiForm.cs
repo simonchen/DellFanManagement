@@ -116,6 +116,8 @@ namespace DellFanManagement.App
             operationModeRadioButtonConsistency.CheckedChanged += new EventHandler(ConfigurationRadioButtonConsistencyEventHandler);
 
             // ...Consistency mode section...
+            stopFanCheckbox.CheckedChanged += new EventHandler(ConsistencyModeTextBoxesChangedEventHandler);
+            coolStopFanDelay.TextChanged += new EventHandler(ConsistencyModeTextBoxesChangedEventHandler);
             consistencyModeLowerTemperatureThresholdTextBox.TextChanged += new EventHandler(ConsistencyModeTextBoxesChangedEventHandler);
             consistencyModeUpperTemperatureThresholdTextBox.TextChanged += new EventHandler(ConsistencyModeTextBoxesChangedEventHandler);
             consistencyModeRpmThresholdTextBox.TextChanged += new EventHandler(ConsistencyModeTextBoxesChangedEventHandler);
@@ -223,6 +225,23 @@ namespace DellFanManagement.App
             if (rpmThreshold != null && rpmThreshold > 0 && rpmThreshold < 10000)
             {
                 consistencyModeRpmThresholdTextBox.Text = rpmThreshold.ToString();
+            }
+
+            if (_configurationStore.GetIntOption(ConfigurationOption.StopFanEnabled) == null ||
+                _configurationStore.GetIntOption(ConfigurationOption.StopFanEnabled) == 0)
+            {
+                stopFanCheckbox.Checked = false;
+                coolStopFanDelay.Enabled = false;
+            }
+            else
+            {
+                stopFanCheckbox.Checked = true;
+                coolStopFanDelay.Enabled = true;
+            }
+            int? cpuCoolDelay = _configurationStore.GetIntOption(ConfigurationOption.CpuCoolDelay);
+            if (cpuCoolDelay != null && cpuCoolDelay >= 0 && cpuCoolDelay < 100)
+            {
+                coolStopFanDelay.Text = cpuCoolDelay.ToString();
             }
 
             // Read previous operation mode from configuration.
@@ -907,6 +926,11 @@ namespace DellFanManagement.App
         private void ConsistencyModeTextBoxesChangedEventHandler(Object sender, EventArgs e)
         {
             // Enforce digits only in these text boxes.
+            if (Regex.IsMatch(coolStopFanDelay.Text, "[^0-9]"))
+            {
+                coolStopFanDelay.Text = Regex.Replace(coolStopFanDelay.Text, "[^0-9]", "");
+            }
+
             if (Regex.IsMatch(consistencyModeLowerTemperatureThresholdTextBox.Text, "[^0-9]"))
             {
                 consistencyModeLowerTemperatureThresholdTextBox.Text = Regex.Replace(consistencyModeLowerTemperatureThresholdTextBox.Text, "[^0-9]", "");
@@ -993,7 +1017,9 @@ namespace DellFanManagement.App
 
             if (consistencyModeLowerTemperatureThresholdTextBox.Text != _core.LowerTemperatureThreshold.ToString() ||
                 consistencyModeUpperTemperatureThresholdTextBox.Text != _core.UpperTemperatureThreshold.ToString() ||
-                consistencyModeRpmThresholdTextBox.Text != _core.RpmThreshold.ToString())
+                consistencyModeRpmThresholdTextBox.Text != _core.RpmThreshold.ToString() ||
+                stopFanCheckbox.Checked != _core.EnableStopFan ||
+                coolStopFanDelay.Text != _core.CpuCoolDelay.ToString())
             {
                 // Configuration doesn't match.  Check for flip-flop.
                 bool success = int.TryParse(consistencyModeLowerTemperatureThresholdTextBox.Text, out int lowerTemperatureThreshold);
@@ -1009,7 +1035,13 @@ namespace DellFanManagement.App
                         }
                     }
                 }
+
+                success = int.TryParse(coolStopFanDelay.Text, out int cpuCoolDelay);
+                if (!success) result = false;
             }
+
+            bool enableStopFan = stopFanCheckbox.Checked;
+            coolStopFanDelay.Enabled = enableStopFan;
 
             consistencyModeApplyChangesButton.Enabled = result;
         }
@@ -1028,13 +1060,20 @@ namespace DellFanManagement.App
                     success = int.TryParse(consistencyModeRpmThresholdTextBox.Text, out int rpmThreshold);
                     if (success)
                     {
-                        _core.WriteConsistencyModeConfiguration(lowerTemperatureThreshold, upperTemperatureThreshold, rpmThreshold);
+                        success = int.TryParse(coolStopFanDelay.Text, out int cpuCoolDelay);
+                        bool enableStopFan = stopFanCheckbox.Checked;
+                        if (success)
+                        {
+                            _core.WriteConsistencyModeConfiguration(lowerTemperatureThreshold, upperTemperatureThreshold, rpmThreshold, enableStopFan, cpuCoolDelay);
 
-                        _configurationStore.SetOption(ConfigurationOption.ConsistencyModeLowerTemperatureThreshold, lowerTemperatureThreshold);
-                        _configurationStore.SetOption(ConfigurationOption.ConsistencyModeUpperTemperatureThreshold, upperTemperatureThreshold);
-                        _configurationStore.SetOption(ConfigurationOption.ConsistencyModeRpmThreshold, rpmThreshold);
+                            _configurationStore.SetOption(ConfigurationOption.ConsistencyModeLowerTemperatureThreshold, lowerTemperatureThreshold);
+                            _configurationStore.SetOption(ConfigurationOption.ConsistencyModeUpperTemperatureThreshold, upperTemperatureThreshold);
+                            _configurationStore.SetOption(ConfigurationOption.ConsistencyModeRpmThreshold, rpmThreshold);
+                            _configurationStore.SetOption(ConfigurationOption.StopFanEnabled, enableStopFan ? 1 : 0);
+                            _configurationStore.SetOption(ConfigurationOption.CpuCoolDelay, cpuCoolDelay);
 
-                        CheckConsistencyModeOptionsConsistency();
+                            CheckConsistencyModeOptionsConsistency();
+                        }
                     }
                 }
             }
@@ -1169,6 +1208,26 @@ namespace DellFanManagement.App
         private static void ShowDisclaimer()
         {
             MessageBox.Show("Note: While every has been made to make this program safe to use, it does interact with the embedded controller and system BIOS using undocumented methods and may have adverse effects on your system.  Use at your own risk.  If you experience odd behavior, a full system shutdown should restore everything back to the original state.  This program is not created by or affiliated with Dell Inc. or Dell Technologies Inc.", "Dell Fan Management – Disclaimer");
+        }
+
+        private void forceStopCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DellFanManagementGuiForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void manualGroupBox_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

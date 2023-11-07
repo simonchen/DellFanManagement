@@ -72,6 +72,10 @@ namespace DellFanManagement.App
             this.manualFan1RadioButtonMedium = new System.Windows.Forms.RadioButton();
             this.manualFan1RadioButtonOff = new System.Windows.Forms.RadioButton();
             this.consistencyModeGroupBox = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.coolStopFanDelay = new System.Windows.Forms.TextBox();
+            this.stopFanCheckbox = new System.Windows.Forms.CheckBox();
             this.consistencyModeApplyChangesButton = new System.Windows.Forms.Button();
             this.consistencyModeRpmThresholdTextBox = new System.Windows.Forms.TextBox();
             this.consistencyModeRpmThresholdLabel = new System.Windows.Forms.Label();
@@ -465,17 +469,18 @@ namespace DellFanManagement.App
             this.manualGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.manualGroupBox.Name = "manualGroupBox";
             this.manualGroupBox.Padding = new System.Windows.Forms.Padding(4);
-            this.manualGroupBox.Size = new System.Drawing.Size(291, 189);
+            this.manualGroupBox.Size = new System.Drawing.Size(302, 189);
             this.manualGroupBox.TabIndex = 9;
             this.manualGroupBox.TabStop = false;
             this.manualGroupBox.Text = "手动控制:";
+            this.manualGroupBox.Enter += new System.EventHandler(this.manualGroupBox_Enter);
             // 
             // manualFan2GroupBox
             // 
             this.manualFan2GroupBox.Controls.Add(this.manualFan2RadioButtonHigh);
             this.manualFan2GroupBox.Controls.Add(this.manualFan2RadioButtonMedium);
             this.manualFan2GroupBox.Controls.Add(this.manualFan2RadioButtonOff);
-            this.manualFan2GroupBox.Location = new System.Drawing.Point(150, 32);
+            this.manualFan2GroupBox.Location = new System.Drawing.Point(154, 32);
             this.manualFan2GroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.manualFan2GroupBox.Name = "manualFan2GroupBox";
             this.manualFan2GroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -486,7 +491,7 @@ namespace DellFanManagement.App
             // 
             // manualFan2RadioButtonHigh
             // 
-            this.manualFan2RadioButtonHigh.Location = new System.Drawing.Point(9, 108);
+            this.manualFan2RadioButtonHigh.Location = new System.Drawing.Point(13, 108);
             this.manualFan2RadioButtonHigh.Margin = new System.Windows.Forms.Padding(4);
             this.manualFan2RadioButtonHigh.Name = "manualFan2RadioButtonHigh";
             this.manualFan2RadioButtonHigh.Size = new System.Drawing.Size(90, 28);
@@ -497,7 +502,7 @@ namespace DellFanManagement.App
             // 
             // manualFan2RadioButtonMedium
             // 
-            this.manualFan2RadioButtonMedium.Location = new System.Drawing.Point(9, 70);
+            this.manualFan2RadioButtonMedium.Location = new System.Drawing.Point(13, 70);
             this.manualFan2RadioButtonMedium.Margin = new System.Windows.Forms.Padding(4);
             this.manualFan2RadioButtonMedium.Name = "manualFan2RadioButtonMedium";
             this.manualFan2RadioButtonMedium.Size = new System.Drawing.Size(90, 28);
@@ -508,7 +513,7 @@ namespace DellFanManagement.App
             // 
             // manualFan2RadioButtonOff
             // 
-            this.manualFan2RadioButtonOff.Location = new System.Drawing.Point(9, 33);
+            this.manualFan2RadioButtonOff.Location = new System.Drawing.Point(13, 33);
             this.manualFan2RadioButtonOff.Margin = new System.Windows.Forms.Padding(4);
             this.manualFan2RadioButtonOff.Name = "manualFan2RadioButtonOff";
             this.manualFan2RadioButtonOff.Size = new System.Drawing.Size(71, 28);
@@ -566,6 +571,10 @@ namespace DellFanManagement.App
             // 
             // consistencyModeGroupBox
             // 
+            this.consistencyModeGroupBox.Controls.Add(this.label2);
+            this.consistencyModeGroupBox.Controls.Add(this.label1);
+            this.consistencyModeGroupBox.Controls.Add(this.coolStopFanDelay);
+            this.consistencyModeGroupBox.Controls.Add(this.stopFanCheckbox);
             this.consistencyModeGroupBox.Controls.Add(this.consistencyModeApplyChangesButton);
             this.consistencyModeGroupBox.Controls.Add(this.consistencyModeRpmThresholdTextBox);
             this.consistencyModeGroupBox.Controls.Add(this.consistencyModeRpmThresholdLabel);
@@ -577,24 +586,63 @@ namespace DellFanManagement.App
             this.consistencyModeGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.consistencyModeGroupBox.Name = "consistencyModeGroupBox";
             this.consistencyModeGroupBox.Padding = new System.Windows.Forms.Padding(4);
-            this.consistencyModeGroupBox.Size = new System.Drawing.Size(291, 207);
+            this.consistencyModeGroupBox.Size = new System.Drawing.Size(302, 207);
             this.consistencyModeGroupBox.TabIndex = 10;
             this.consistencyModeGroupBox.TabStop = false;
             this.consistencyModeGroupBox.Text = "平滑模式选项";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(43, 121);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 24);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "延迟";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(159, 121);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 24);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "秒";
+            // 
+            // coolStopFanDelay
+            // 
+            this.coolStopFanDelay.Location = new System.Drawing.Point(106, 118);
+            this.coolStopFanDelay.Margin = new System.Windows.Forms.Padding(4);
+            this.coolStopFanDelay.MaxLength = 2;
+            this.coolStopFanDelay.Name = "coolStopFanDelay";
+            this.coolStopFanDelay.Size = new System.Drawing.Size(44, 30);
+            this.coolStopFanDelay.TabIndex = 16;
+            this.coolStopFanDelay.Text = "10";
+            // 
+            // stopFanCheckbox
+            // 
+            this.stopFanCheckbox.Location = new System.Drawing.Point(18, 80);
+            this.stopFanCheckbox.Name = "stopFanCheckbox";
+            this.stopFanCheckbox.Size = new System.Drawing.Size(268, 32);
+            this.stopFanCheckbox.TabIndex = 15;
+            this.stopFanCheckbox.Text = "低于温度下限停止风扇";
+            this.stopFanCheckbox.UseVisualStyleBackColor = true;
+            this.stopFanCheckbox.CheckedChanged += new System.EventHandler(this.forceStopCheckBox_CheckedChanged);
+            // 
             // consistencyModeApplyChangesButton
             // 
-            this.consistencyModeApplyChangesButton.Location = new System.Drawing.Point(8, 160);
+            this.consistencyModeApplyChangesButton.Location = new System.Drawing.Point(214, 160);
             this.consistencyModeApplyChangesButton.Margin = new System.Windows.Forms.Padding(4);
             this.consistencyModeApplyChangesButton.Name = "consistencyModeApplyChangesButton";
-            this.consistencyModeApplyChangesButton.Size = new System.Drawing.Size(276, 38);
+            this.consistencyModeApplyChangesButton.Size = new System.Drawing.Size(75, 38);
             this.consistencyModeApplyChangesButton.TabIndex = 14;
-            this.consistencyModeApplyChangesButton.Text = "适应更改 (&A)";
+            this.consistencyModeApplyChangesButton.Text = "更改";
             this.consistencyModeApplyChangesButton.UseVisualStyleBackColor = true;
             // 
             // consistencyModeRpmThresholdTextBox
             // 
-            this.consistencyModeRpmThresholdTextBox.Location = new System.Drawing.Point(212, 116);
+            this.consistencyModeRpmThresholdTextBox.Location = new System.Drawing.Point(128, 167);
             this.consistencyModeRpmThresholdTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.consistencyModeRpmThresholdTextBox.MaxLength = 4;
             this.consistencyModeRpmThresholdTextBox.Name = "consistencyModeRpmThresholdTextBox";
@@ -604,16 +652,16 @@ namespace DellFanManagement.App
             // 
             // consistencyModeRpmThresholdLabel
             // 
-            this.consistencyModeRpmThresholdLabel.Location = new System.Drawing.Point(10, 122);
+            this.consistencyModeRpmThresholdLabel.Location = new System.Drawing.Point(18, 170);
             this.consistencyModeRpmThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.consistencyModeRpmThresholdLabel.Name = "consistencyModeRpmThresholdLabel";
-            this.consistencyModeRpmThresholdLabel.Size = new System.Drawing.Size(142, 24);
+            this.consistencyModeRpmThresholdLabel.Size = new System.Drawing.Size(111, 24);
             this.consistencyModeRpmThresholdLabel.TabIndex = 4;
             this.consistencyModeRpmThresholdLabel.Text = "RPM 限值:";
             // 
             // consistencyModeUpperTemperatureThresholdTextBox
             // 
-            this.consistencyModeUpperTemperatureThresholdTextBox.Location = new System.Drawing.Point(238, 74);
+            this.consistencyModeUpperTemperatureThresholdTextBox.Location = new System.Drawing.Point(247, 36);
             this.consistencyModeUpperTemperatureThresholdTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.consistencyModeUpperTemperatureThresholdTextBox.MaxLength = 2;
             this.consistencyModeUpperTemperatureThresholdTextBox.Name = "consistencyModeUpperTemperatureThresholdTextBox";
@@ -623,16 +671,16 @@ namespace DellFanManagement.App
             // 
             // consistencyModeUpperTemperatureThresholdLabel
             // 
-            this.consistencyModeUpperTemperatureThresholdLabel.Location = new System.Drawing.Point(9, 78);
+            this.consistencyModeUpperTemperatureThresholdLabel.Location = new System.Drawing.Point(157, 41);
             this.consistencyModeUpperTemperatureThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.consistencyModeUpperTemperatureThresholdLabel.Name = "consistencyModeUpperTemperatureThresholdLabel";
-            this.consistencyModeUpperTemperatureThresholdLabel.Size = new System.Drawing.Size(268, 24);
+            this.consistencyModeUpperTemperatureThresholdLabel.Size = new System.Drawing.Size(91, 24);
             this.consistencyModeUpperTemperatureThresholdLabel.TabIndex = 2;
-            this.consistencyModeUpperTemperatureThresholdLabel.Text = "CPU高温限制";
+            this.consistencyModeUpperTemperatureThresholdLabel.Text = "温度上限";
             // 
             // consistencyModeLowerTemperatureThresholdTextBox
             // 
-            this.consistencyModeLowerTemperatureThresholdTextBox.Location = new System.Drawing.Point(238, 30);
+            this.consistencyModeLowerTemperatureThresholdTextBox.Location = new System.Drawing.Point(106, 38);
             this.consistencyModeLowerTemperatureThresholdTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.consistencyModeLowerTemperatureThresholdTextBox.MaxLength = 2;
             this.consistencyModeLowerTemperatureThresholdTextBox.Name = "consistencyModeLowerTemperatureThresholdTextBox";
@@ -642,12 +690,12 @@ namespace DellFanManagement.App
             // 
             // consistencyModeLowerTemperatureThresholdLabel
             // 
-            this.consistencyModeLowerTemperatureThresholdLabel.Location = new System.Drawing.Point(9, 34);
+            this.consistencyModeLowerTemperatureThresholdLabel.Location = new System.Drawing.Point(13, 41);
             this.consistencyModeLowerTemperatureThresholdLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.consistencyModeLowerTemperatureThresholdLabel.Name = "consistencyModeLowerTemperatureThresholdLabel";
-            this.consistencyModeLowerTemperatureThresholdLabel.Size = new System.Drawing.Size(265, 24);
+            this.consistencyModeLowerTemperatureThresholdLabel.Size = new System.Drawing.Size(90, 27);
             this.consistencyModeLowerTemperatureThresholdLabel.TabIndex = 0;
-            this.consistencyModeLowerTemperatureThresholdLabel.Text = "CPU低温限值";
+            this.consistencyModeLowerTemperatureThresholdLabel.Text = "温度下限";
             // 
             // alertsCheckBox
             // 
@@ -781,10 +829,10 @@ namespace DellFanManagement.App
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.consistencyModeStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 441);
+            this.statusStrip.Location = new System.Drawing.Point(0, 437);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
-            this.statusStrip.Size = new System.Drawing.Size(1103, 31);
+            this.statusStrip.Size = new System.Drawing.Size(1073, 31);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 13;
             // 
@@ -829,7 +877,7 @@ namespace DellFanManagement.App
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1103, 472);
+            this.ClientSize = new System.Drawing.Size(1073, 468);
             this.Controls.Add(this.alertsCheckBox);
             this.Controls.Add(this.animatedCheckBox);
             this.Controls.Add(this.trayIconCheckBox);
@@ -849,7 +897,8 @@ namespace DellFanManagement.App
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "DellFanManagementGuiForm";
-            this.Text = "Dell 风扇管理 (仅适用于EC控制风扇，汉化修改 - cxy)";
+            this.Text = "Dell 风扇管理 (仅适用于EC控制风扇 | 汉化修改: cxy | 2023-11-07)";
+            this.Load += new System.EventHandler(this.DellFanManagementGuiForm_Load);
             this.fansGroupBox.ResumeLayout(false);
             this.fansGroupBox.PerformLayout();
             this.thermalSettingGroupBox.ResumeLayout(false);
@@ -939,6 +988,10 @@ namespace DellFanManagement.App
         private System.Windows.Forms.CheckBox trayIconCheckBox;
         private System.Windows.Forms.CheckBox alertsCheckBox;
         private System.Windows.Forms.CheckBox animatedCheckBox;
+        private System.Windows.Forms.CheckBox stopFanCheckbox;
+        private System.Windows.Forms.TextBox coolStopFanDelay;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

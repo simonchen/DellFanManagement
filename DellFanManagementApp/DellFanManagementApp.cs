@@ -32,6 +32,9 @@ namespace DellFanManagement.App
 
             if (args.Length == 0)
             {
+                // Patching to set current direcotry using "c:\windows\system32"
+                Environment.CurrentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                //MessageBox.Show(Environment.CurrentDirectory, "");
                 // GUI mode.
                 try
                 {

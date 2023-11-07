@@ -64,6 +64,9 @@ namespace DellFanManagement.App
         /// </summary>
         private FanLevel? _fan2LevelRequested;
 
+        public bool EnableStopFan;
+        public int? CpuCoolDelay { get; private set; }
+
         /// <summary>
         /// Lower temperature threshold for consistency mode.
         /// </summary>
@@ -108,6 +111,8 @@ namespace DellFanManagement.App
             LowerTemperatureThreshold = null;
             UpperTemperatureThreshold = null;
             RpmThreshold = null;
+            EnableStopFan = false;
+            CpuCoolDelay = 10;
             TrayIconColor = TrayIconColor.Gray;
         }
 
@@ -487,11 +492,13 @@ namespace DellFanManagement.App
         /// <param name="lowerTemperatureThreshold">Lower temperature threshold</param>
         /// <param name="upperTemperatureThreshold">Upper temperature threshold</param>
         /// <param name="rpmThreshold">Fan speed threshold</param>
-        public void WriteConsistencyModeConfiguration(int lowerTemperatureThreshold, int upperTemperatureThreshold, int rpmThreshold)
+        public void WriteConsistencyModeConfiguration(int lowerTemperatureThreshold, int upperTemperatureThreshold, int rpmThreshold, bool enableStopFan, int cpuCoolDelay)
         {
             LowerTemperatureThreshold = lowerTemperatureThreshold;
             UpperTemperatureThreshold = upperTemperatureThreshold;
             RpmThreshold = ulong.Parse(rpmThreshold.ToString());
+            EnableStopFan = enableStopFan;
+            CpuCoolDelay = cpuCoolDelay;
         }
 
         /// <summary>
