@@ -1,6 +1,6 @@
 # 戴尔DELL笔电风扇速度控制
 
-<img src="DellFanMan.png" />
+<img src="DellFanMan_new.png" />
 
 **注意：[此程序可能不适用于控制DELL笔电Intel 11代及以上BIOS系统](https://github.com/AaronKelley/DellFanManagement/issues/14)**
 
